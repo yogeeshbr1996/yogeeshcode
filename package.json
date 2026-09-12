@@ -1,6 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "yogeeshcode",
+  "yogeeshcode": {
+    "version": "1.0.0",
+    "base": "opencode",
+    "base_version": "1.18.30"
+  },
   "description": "YogeeshCode - AI-powered development tool (forked from sst/opencode, not affiliated with OpenCode team)",
   "private": true,
   "type": "module",
@@ -119,7 +124,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anomalyco/opencode"
+    "url": "https://github.com/yogeeshbr1996/yogeeshcode"
   },
   "license": "MIT",
   "prettier": {

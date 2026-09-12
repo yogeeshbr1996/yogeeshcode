@@ -11,6 +11,7 @@ import { ModelsCommand } from "./cli/cmd/models"
 import { RegistryCommand } from "./cli/cmd/registry"
 import { UI } from "./cli/ui"
 import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import { yogeeshVersionInfo } from "@opencode-ai/core/installation/yogeesh-version"
 import { FormatError } from "./cli/error"
 import { ServeCommand } from "./cli/cmd/serve"
 import { DebugCommand } from "./cli/cmd/debug"
@@ -49,7 +50,7 @@ const cli = yargs(args)
   .wrap(100)
   .help("help", "show help")
   .alias("help", "h")
-  .version("version", "show version number", InstallationVersion)
+  .version("version", "show version number", yogeeshVersionInfo())
   .alias("version", "v")
   .option("print-logs", {
     describe: "print logs to stderr",

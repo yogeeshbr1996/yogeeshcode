@@ -1,2 +1,41 @@
-packages/core/migration/**/snapshot.json linguist-generated
-packages/core/src/database/migration.gen.ts linguist-generated
+# YogeeshCode branded files - ALWAYS keep our version on merge.
+# Git auto-resolves conflicts on these in OUR favor.
+# `git merge upstream/dev` NEVER overwrites our branding.
+
+README.md merge=ours
+package.json merge=ours
+UPSTREAM_MERGE.md merge=ours
+.gitattributes merge=ours
+.gitignore merge=ours
+yogeeshcode.json.example merge=ours
+script/yogeesh-build.sh merge=ours
+script/yogeesh-install.sh merge=ours
+script/yogeesh-sync.sh merge=ours
+script/version.sh merge=ours
+script/release.sh merge=ours
+packages/core/src/global.ts merge=ours
+packages/core/src/flag/flag.ts merge=ours
+packages/core/src/installation/yogeesh-version.ts merge=ours
+packages/opencode/bin/yogeeshcode merge=ours
+packages/opencode/src/config/paths.ts merge=ours
+packages/opencode/src/config/config.ts merge=ours
+packages/tui/src/logo.ts merge=ours
+packages/opencode/src/session/retry.ts merge=ours
+packages/opencode/src/session/model-fallthrough.ts merge=ours
+packages/opencode/src/session/export-format.ts merge=ours
+packages/opencode/src/session/processor.ts merge=ours
+packages/opencode/src/session/prompt.ts merge=ours
+packages/opencode/src/provider/model-registry.ts merge=ours
+packages/opencode/src/provider/model-status.ts merge=ours
+packages/opencode/src/cli/cmd/registry.ts merge=ours
+sdks/vscode/package.json merge=ours
+sdks/vscode/src/extension.ts merge=ours
+sdks/vscode/README.md merge=ours
+packages/desktop/package.json merge=ours
+packages/desktop/electron-builder.config.ts merge=ours
+packages/desktop/electron.vite.config.ts merge=ours
+bun.lock merge=ours
+packages/opencode/bun.lock merge=ours
+sdks/vscode/bun.lock merge=ours
+packages/desktop/bun.lock merge=ours
+packages/tui/bun.lock merge=ours
