@@ -18,12 +18,7 @@ export interface YogRegistrySnapshot {
 
 const DEFAULT_AUTO_REFRESH_MS = 12 * 60 * 60 * 1000
 const CACHE_DIR = (): string => {
-  try {
-    const { Global } = require("@opencode-ai/core/global") as typeof import("@opencode-ai/core/global")
-    return Global.Path.data
-  } catch {
-    return "~/.yogeeshcode"
-  }
+  return process.env.YOGEESHCODE_CONFIG_DIR || "~/.yogeeshcode"
 }
 
 const REMOTE_URLS: Array<{ providerID: string; url: string }> = [

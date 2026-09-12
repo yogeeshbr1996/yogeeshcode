@@ -5,7 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 TARGET="${1:-all}"
 RELEASE_DIR="$ROOT/release"
-VERSION="$(node -p "require('./package.json').version")"
+VERSION="$(node -p "require('./packages/opencode/package.json').version")"
 OS="$(uname -s | tr '[:upper:' '[:lower:')"
 ARCH="$(uname -m)"
 case "$ARCH" in arm64|aarch64) ARCH="arm64" ;; x86_64|amd64) ARCH="x64" ;; esac
