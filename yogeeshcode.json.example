@@ -1,8 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "_comment": "YogeeshCode ships FREE-MODEL-ONLY by default. All ranked models are $0. Paid models only if you explicitly set them.",
   "theme": "yogeeshcode",
-  "model": "opencode/big-pickle",
-  "small_model": "opencode/big-pickle",
+  "model": "openrouter-free/nex-agi/nex-n2.5-pro:free",
+  "small_model": "openrouter-free/qwen/qwen3-coder:free",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -33,12 +34,23 @@
         "llama-3.3-70b-versatile": { "name": "Yogeesh rank 6 - Llama 70B fast", "limit": { "context": 128000, "output": 8000 } },
         "qwen-qwq-32b": { "name": "Yogeesh rank 7 - Qwen 32B reasoning", "limit": { "context": 128000, "output": 8000 } }
       }
+    },
+    "gemini-free": {
+      "npm": "@ai-sdk/google",
+      "name": "Gemini free tier (best planner, 1M context)",
+      "options": { "apiKey": "{env:GEMINI_API_KEY}" },
+      "models": {
+        "gemini-2.5-flash": { "name": "Gemini 2.5 Flash (free tier)", "limit": { "context": 1000000, "output": 8192 } },
+        "gemini-2.0-flash": { "name": "Gemini 2.0 Flash (free tier)", "limit": { "context": 1000000, "output": 8192 } }
+      }
     }
   },
   "yogeeshcode": {
+    "free_models_only": true,
     "model_ranker": {
       "auto": true,
       "order": [
+        "gemini-free/gemini-2.5-flash",
         "openrouter-free/nex-agi/nex-n2.5-pro:free",
         "openrouter-free/z-ai/glm-4.5-air:free",
         "openrouter-free/qwen/qwen3-coder:free",
@@ -52,7 +64,7 @@
     }
   },
   "agent": {
-    "plan": { "model": "gemini/gemini-2.5-flash", "description": "YogeeshCode planner - free tier, big context" },
+    "plan": { "model": "gemini-free/gemini-2.5-flash", "description": "YogeeshCode planner - Gemini free tier, 1M context" },
     "build": { "model": "openrouter-free/nex-agi/nex-n2.5-pro:free", "description": "YogeeshCode builder - auto fallthrough to ranked free models, local last" }
   }
 }

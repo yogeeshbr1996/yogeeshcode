@@ -7,6 +7,7 @@ export function parseModelRef(ref: string): ModelRef | undefined {
   return { providerID: ref.slice(0, idx), modelID: ref.slice(idx + 1) }
 }
 export const DEFAULT_RANKED_FREE_MODELS: string[] = [
+  "gemini-free/gemini-2.5-flash",
   "openrouter-free/nex-agi/nex-n2.5-pro:free",
   "openrouter-free/z-ai/glm-4.5-air:free",
   "openrouter-free/qwen/qwen3-coder:free",

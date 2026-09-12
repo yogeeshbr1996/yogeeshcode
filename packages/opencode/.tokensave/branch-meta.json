@@ -1,0 +1,10 @@
+{
+  "default_branch": "yogeeshcode-rebrand",
+  "branches": {
+    "yogeeshcode-rebrand": {
+      "db_file": "tokensave.db",
+      "created_at": "1789203392",
+      "last_synced_at": "1789203392"
+    }
+  }
+}
