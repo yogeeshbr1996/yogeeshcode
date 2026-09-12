@@ -24,9 +24,11 @@ PKG="$ROOT/package.json"
 BASE_PKG="$ROOT/packages/opencode/package.json"
 
 grep_version() { node -p "require('$1').version" 2>/dev/null; }
+# YogeeshCode version lives at package.json -> yogeeshcode.version (4-part: base.ourpatch)
+yogeesh_version() { node -p "require('$PKG').yogeeshcode?.version || ''" 2>/dev/null; }
 
 BASE_VERSION="$(grep_version "$BASE_PKG")"
-YOGEESH_VERSION="$(grep_version "$PKG")"
+YOGEESH_VERSION="$(yogeesh_version)"
 
 # Parse our 4-part version: BASE.MYPATCH
 MYPATCH="1"
@@ -47,9 +49,9 @@ set_version() {
   node -e "
     const fs = require('fs');
     const pkg = JSON.parse(fs.readFileSync('$PKG','utf8'));
-    pkg.version = '$new_ver';
-    fs.writeFileSync('$PKG', JSON.stringify(pkg, null, 2) + '
-');
+    pkg.yogeeshcode = pkg.yogeeshcode || {};
+    pkg.yogeeshcode.version = '$new_ver';
+    fs.writeFileSync('$PKG', JSON.stringify(pkg, null, 2) + '\n');
   "
   echo "Set YogeeshCode version: $new_ver"
 }
@@ -77,7 +79,7 @@ case "${1:-show}" in
     set_version "${MAJOR}.${MINOR}.${PATCH}.1"
     ;;
   set-base)
-    local base_ver="$2"
+    base_ver="$2"
     IFS='.' read -r MAJOR MINOR PATCH <<< "$base_ver"
     MAJOR="${MAJOR:-0}"; MINOR="${MINOR:-0}"; PATCH="${PATCH:-0}"
     # Also update the base package.json
