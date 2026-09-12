@@ -1,47 +1,505 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "_comment": "YogeeshCode ships FREE-MODEL-ONLY by default. All ranked models are $0. Paid models only if you explicitly set them.",
+  "_comment": "YogeeshCode ships FREE-MODEL-ONLY by default. All ranked models are $0.",
   "theme": "yogeeshcode",
-  "model": "openrouter-free/nex-agi/nex-n2.5-pro:free",
-  "small_model": "openrouter-free/qwen/qwen3-coder:free",
+  "model": "gemini-free/gemini-2.5-flash",
+  "small_model": "gemini-free/gemini-2.0-flash",
   "provider": {
-    "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (local, free, unlimited)",
-      "options": { "baseURL": "http://localhost:11434/v1" },
+    "gemini-free": {
+      "npm": "@ai-sdk/google",
+      "name": "Gemini free tier (best planner, 1M ctx)",
+      "options": {
+        "apiKey": "{env:GEMINI_API_KEY}"
+      },
       "models": {
-        "qwen2.5-coder:14b": { "name": "Qwen2.5-Coder 14B (local fallback)", "limit": { "context": 32768, "output": 8192 } },
-        "qwen3-coder:30b": { "name": "Qwen3-Coder 30B (local best)", "limit": { "context": 64000, "output": 16000 } }
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (free, 1M)",
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        "gemini-2.0-flash": {
+          "name": "Gemini 2.0 Flash (free, 1M)",
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro (free tier)",
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        }
       }
     },
     "openrouter-free": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenRouter free endpoints ($0)",
-      "options": { "baseURL": "https://openrouter.ai/api/v1", "apiKey": "{env:OPENROUTER_API_KEY}" },
+      "name": "OpenRouter free ($0, auto-rotate)",
+      "options": {
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "{env:OPENROUTER_API_KEY}"
+      },
       "models": {
-        "nex-agi/nex-n2.5-pro:free": { "name": "Yogeesh rank 1 - Nex Pro free (agentic coding)", "limit": { "context": 262144, "output": 16000 } },
-        "z-ai/glm-4.5-air:free": { "name": "Yogeesh rank 2 - GLM 4.5 Air free (coding)", "limit": { "context": 128000, "output": 12000 } },
-        "qwen/qwen3-coder:free": { "name": "Yogeesh rank 3 - Qwen3-Coder free", "limit": { "context": 128000, "output": 12000 } },
-        "deepseek/deepseek-chat:free": { "name": "Yogeesh rank 4 - DeepSeek free (executor)", "limit": { "context": 128000, "output": 8000 } },
-        "moonshotai/kimi-k2:free": { "name": "Yogeesh rank 5 - Kimi K2 free (long context)", "limit": { "context": 200000, "output": 12000 } }
+        "nex-agi/nex-n2.5-pro:free": {
+          "name": "Nex N2.5 Pro (agentic, 262K)",
+          "limit": {
+            "context": 262144,
+            "output": 16000
+          }
+        },
+        "nex-agi/nex-n2.5-mini:free": {
+          "name": "Nex N2.5 Mini (agentic, 262K)",
+          "limit": {
+            "context": 262144,
+            "output": 16000
+          }
+        },
+        "qwen/qwen3-coder:free": {
+          "name": "Qwen3 Coder (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 12000
+          }
+        },
+        "deepseek/deepseek-chat:free": {
+          "name": "DeepSeek Chat (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek/deepseek-r1:free": {
+          "name": "DeepSeek R1 (reasoning, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/llama-3.3-70b-instruct:free": {
+          "name": "Llama 3.3 70B (80K)",
+          "limit": {
+            "context": 80000,
+            "output": 8000
+          }
+        },
+        "meta-llama/llama-3.1-405b-instruct:free": {
+          "name": "Llama 3.1 405B (16K)",
+          "limit": {
+            "context": 16000,
+            "output": 4000
+          }
+        },
+        "qwen/qwen3-235b-a22b:free": {
+          "name": "Qwen3 235B (reasoning, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 12000
+          }
+        },
+        "mistralai/mistral-small-3.1-24b-instruct:free": {
+          "name": "Mistral Small 3.1 24B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "mistralai/mistral-7b-instruct:free": {
+          "name": "Mistral 7B (32K)",
+          "limit": {
+            "context": 32000,
+            "output": 4000
+          }
+        },
+        "microsoft/phi-3-medium-128k-instruct:free": {
+          "name": "Phi-3 Medium (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "microsoft/phi-3-mini-128k-instruct:free": {
+          "name": "Phi-3 Mini (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 4000
+          }
+        },
+        "openchat/openchat-7b:free": {
+          "name": "OpenChat 7B (8K)",
+          "limit": {
+            "context": 8000,
+            "output": 4000
+          }
+        },
+        "undi95/toppy-m-7b:free": {
+          "name": "Toppy M 7B (4K)",
+          "limit": {
+            "context": 4000,
+            "output": 2000
+          }
+        },
+        "sophosympatheia/rogue-rose-103b-v0.2:free": {
+          "name": "Rogue Rose 103B (4K)",
+          "limit": {
+            "context": 4000,
+            "output": 2000
+          }
+        },
+        "gryphe/mythomax-l2-13b:free": {
+          "name": "Mythomax 13B (4K)",
+          "limit": {
+            "context": 4000,
+            "output": 2000
+          }
+        },
+        "google/gemini-2.0-flash:free": {
+          "name": "Gemini 2.0 Flash (1M)",
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        "anthropic/claude-3.5-haiku:free": {
+          "name": "Claude 3.5 Haiku (200K)",
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        }
       }
     },
     "groq-free": {
       "npm": "@ai-sdk/groq",
       "name": "Groq free tier (fast executor)",
-      "options": { "apiKey": "{env:GROQ_API_KEY}" },
+      "options": {
+        "apiKey": "{env:GROQ_API_KEY}"
+      },
       "models": {
-        "llama-3.3-70b-versatile": { "name": "Yogeesh rank 6 - Llama 70B fast", "limit": { "context": 128000, "output": 8000 } },
-        "qwen-qwq-32b": { "name": "Yogeesh rank 7 - Qwen 32B reasoning", "limit": { "context": 128000, "output": 8000 } }
+        "llama-3.3-70b-versatile": {
+          "name": "Llama 3.3 70B (fast, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "llama-3.1-8b-instant": {
+          "name": "Llama 3.1 8B (fast, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "qwen-qwq-32b": {
+          "name": "Qwen QwQ 32B (reasoning, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "llama-3.1-70b-versatile": {
+          "name": "Llama 3.1 70B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
       }
     },
-    "gemini-free": {
-      "npm": "@ai-sdk/google",
-      "name": "Gemini free tier (best planner, 1M context)",
-      "options": { "apiKey": "{env:GEMINI_API_KEY}" },
+    "deepseek-direct": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DeepSeek direct API (free tier)",
+      "options": {
+        "baseURL": "https://api.deepseek.com/v1",
+        "apiKey": "{env:DEEPSEEK_API_KEY}"
+      },
       "models": {
-        "gemini-2.5-flash": { "name": "Gemini 2.5 Flash (free tier)", "limit": { "context": 1000000, "output": 8192 } },
-        "gemini-2.0-flash": { "name": "Gemini 2.0 Flash (free tier)", "limit": { "context": 1000000, "output": 8192 } }
+        "deepseek-chat": {
+          "name": "DeepSeek V3 (free tier, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek-reasoner": {
+          "name": "DeepSeek R1 (free tier, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "mistral-direct": {
+      "npm": "@ai-sdk/mistral",
+      "name": "Mistral direct (free tier)",
+      "options": {
+        "apiKey": "{env:MISTRAL_API_KEY}"
+      },
+      "models": {
+        "mistral-7b-instruct": {
+          "name": "Mistral 7B (free tier, 32K)",
+          "limit": {
+            "context": 32000,
+            "output": 4000
+          }
+        },
+        "mixtral-8x7b-instruct": {
+          "name": "Mixtral 8x7B (free tier, 32K)",
+          "limit": {
+            "context": 32000,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "huggingface": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "HuggingFace inference (free tier)",
+      "options": {
+        "baseURL": "https://api-inference.huggingface.co/v1",
+        "apiKey": "{env:HF_API_KEY}"
+      },
+      "models": {
+        "meta-llama/Llama-3.1-70B-Instruct": {
+          "name": "Llama 3.1 70B (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/Llama-3.1-8B-Instruct": {
+          "name": "Llama 3.1 8B (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Qwen/Qwen2.5-Coder-32B-Instruct": {
+          "name": "Qwen2.5 Coder 32B (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Qwen/Qwen2.5-72B-Instruct": {
+          "name": "Qwen2.5 72B (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {
+          "name": "DeepSeek R1 Distill (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "microsoft/Phi-3.5-mini-instruct": {
+          "name": "Phi-3.5 Mini (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 4000
+          }
+        },
+        "google/gemma-2-27b-it": {
+          "name": "Gemma 2 27B (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "microsoft/Phi-3-medium-128k-instruct": {
+          "name": "Phi-3 Medium (HF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local, free, unlimited)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5-coder:14b": {
+          "name": "Qwen2.5-Coder 14B (local fallback)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "qwen3-coder:30b": {
+          "name": "Qwen3-Coder 30B (local best)",
+          "limit": {
+            "context": 64000,
+            "output": 16000
+          }
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5-Coder 7B (local)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "deepseek-r1:8b": {
+          "name": "DeepSeek R1 8B (local)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "llama3.3:70b": {
+          "name": "Llama 3.3 70B (local)",
+          "limit": {
+            "context": 8192,
+            "output": 4000
+          }
+        },
+        "codellama:34b": {
+          "name": "CodeLlama 34B (local)",
+          "limit": {
+            "context": 16000,
+            "output": 8000
+          }
+        },
+        "gpt-oss:20b": {
+          "name": "GPT-OSS 20B (local, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "llama3.1:8b": {
+          "name": "Llama 3.1 8B (local)",
+          "limit": {
+            "context": 8192,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "cloudflare": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Cloudflare Workers AI (free tier)",
+      "options": {
+        "baseURL": "https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1",
+        "apiKey": "{env:CF_API_KEY}"
+      },
+      "models": {
+        "@cf/meta/llama-3.1-8b-instruct": {
+          "name": "Llama 3.1 8B (CF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "@cf/qwen/qwen1.5-14b-chat-awq": {
+          "name": "Qwen 1.5 14B (CF free, 8K)",
+          "limit": {
+            "context": 8192,
+            "output": 4000
+          }
+        },
+        "@cf/mistral/mistral-7b-instruct-v0.2": {
+          "name": "Mistral 7B (CF free, 8K)",
+          "limit": {
+            "context": 8192,
+            "output": 4000
+          }
+        },
+        "@cf/meta/llama-3.3-70b-instruct-fp8-fast": {
+          "name": "Llama 3.3 70B (CF free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "together": {
+      "npm": "@ai-sdk/togetherai",
+      "name": "Together AI (free tier)",
+      "options": {
+        "apiKey": "{env:TOGETHER_API_KEY}"
+      },
+      "models": {
+        "meta-llama/Llama-3.3-70B-Instruct-Turbo": {
+          "name": "Llama 3.3 70B Turbo (Together free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Qwen/Qwen2.5-Coder-32B-Instruct": {
+          "name": "Qwen2.5 Coder 32B (Together free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {
+          "name": "DeepSeek R1 Distill (Together free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "cerebras": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Cerebras free tier (very fast)",
+      "options": {
+        "baseURL": "https://api.cerebras.ai/v1",
+        "apiKey": "{env:CEREBRAS_API_KEY}"
+      },
+      "models": {
+        "llama3.1-8b": {
+          "name": "Llama 3.1 8B (Cerebras free, 8K)",
+          "limit": {
+            "context": 8192,
+            "output": 4000
+          }
+        },
+        "llama3.1-70b": {
+          "name": "Llama 3.1 70B (Cerebras free, 8K)",
+          "limit": {
+            "context": 8192,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "perplexity": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Perplexity free tier",
+      "options": {
+        "baseURL": "https://api.perplexity.ai",
+        "apiKey": "{env:PERPLEXITY_API_KEY}"
+      },
+      "models": {
+        "llama-3.1-sonar-large-128k-online": {
+          "name": "Llama 3.1 Sonar (Perplexity free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "llama-3.1-sonar-small-128k-online": {
+          "name": "Llama 3.1 Sonar Small (Perplexity free, 128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
       }
     }
   },
@@ -52,19 +510,69 @@
       "order": [
         "gemini-free/gemini-2.5-flash",
         "openrouter-free/nex-agi/nex-n2.5-pro:free",
-        "openrouter-free/z-ai/glm-4.5-air:free",
+        "openrouter-free/nex-agi/nex-n2.5-mini:free",
         "openrouter-free/qwen/qwen3-coder:free",
         "openrouter-free/deepseek/deepseek-chat:free",
-        "openrouter-free/moonshotai/kimi-k2:free",
+        "openrouter-free/meta-llama/llama-3.3-70b-instruct:free",
         "groq-free/llama-3.3-70b-versatile",
-        "ollama/qwen2.5-coder:14b"
+        "groq-free/qwen-qwq-32b",
+        "groq-free/llama-3.1-70b-versatile",
+        "groq-free/llama-3.1-8b-instant",
+        "deepseek-direct/deepseek-chat",
+        "deepseek-direct/deepseek-reasoner",
+        "mistral-direct/mixtral-8x7b-instruct",
+        "mistral-direct/mistral-7b-instruct",
+        "huggingface/Qwen/Qwen2.5-Coder-32B-Instruct",
+        "huggingface/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+        "huggingface/meta-llama/Llama-3.1-70B-Instruct",
+        "huggingface/Qwen/Qwen2.5-72B-Instruct",
+        "together/meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "together/Qwen/Qwen2.5-Coder-32B-Instruct",
+        "together/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+        "openrouter-free/deepseek/deepseek-r1:free",
+        "openrouter-free/meta-llama/llama-3.1-405b-instruct:free",
+        "openrouter-free/qwen/qwen3-235b-a22b:free",
+        "openrouter-free/mistralai/mistral-small-3.1-24b-instruct:free",
+        "openrouter-free/microsoft/phi-3-medium-128k-instruct:free",
+        "openrouter-free/microsoft/phi-3-mini-128k-instruct:free",
+        "openrouter-free/anthropic/claude-3.5-haiku:free",
+        "huggingface/google/gemma-2-27b-it",
+        "huggingface/microsoft/Phi-3.5-mini-instruct",
+        "huggingface/microsoft/Phi-3-medium-128k-instruct",
+        "huggingface/meta-llama/Llama-3.1-8B-Instruct",
+        "cloudflare/@cf/meta/llama-3.1-8b-instruct",
+        "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+        "cerebras/llama3.1-70b",
+        "cerebras/llama3.1-8b",
+        "perplexity/llama-3.1-sonar-large-128k-online",
+        "perplexity/llama-3.1-sonar-small-128k-online",
+        "openrouter-free/mistralai/mistral-7b-instruct:free",
+        "openrouter-free/openchat/openchat-7b:free",
+        "openrouter-free/google/gemini-2.0-flash:free",
+        "ollama/qwen2.5-coder:14b",
+        "ollama/qwen3-coder:30b",
+        "ollama/qwen2.5-coder:7b",
+        "ollama/deepseek-r1:8b",
+        "ollama/codellama:34b",
+        "ollama/gpt-oss:20b",
+        "ollama/llama3.3:70b",
+        "ollama/llama3.1:8b",
+        "openrouter-free/undi95/toppy-m-7b:free",
+        "openrouter-free/sophosympatheia/rogue-rose-103b-v0.2:free",
+        "openrouter-free/gryphe/mythomax-l2-13b:free"
       ],
       "cooldown_ms": 60000,
-      "max_attempts": 50
+      "max_attempts": 100
     }
   },
   "agent": {
-    "plan": { "model": "gemini-free/gemini-2.5-flash", "description": "YogeeshCode planner - Gemini free tier, 1M context" },
-    "build": { "model": "openrouter-free/nex-agi/nex-n2.5-pro:free", "description": "YogeeshCode builder - auto fallthrough to ranked free models, local last" }
+    "plan": {
+      "model": "gemini-free/gemini-2.5-flash",
+      "description": "YogeeshCode planner - Gemini free tier, 1M context"
+    },
+    "build": {
+      "model": "openrouter-free/nex-agi/nex-n2.5-pro:free",
+      "description": "YogeeshCode builder - auto fallthrough to ranked free models, local last"
+    }
   }
 }
