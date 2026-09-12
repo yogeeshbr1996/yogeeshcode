@@ -2,6 +2,7 @@ import { EOL } from "os"
 import { Effect } from "effect"
 import { effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
+import { Config } from "@/config/config"
 import {
   getCachedSnapshot,
   getOrRefresh,
@@ -24,8 +25,8 @@ export const RegistryCommand = effectCmd({
     const action = (args.action as string) ?? "status"
     const apiKeyRecord: Record<string, string> = {}
     try {
-      const { Config } = yield* Effect.promise(() => import("@/config/config"))
-      const c: any = yield* Config.get()
+      const config = yield* Config.Service
+      const c: any = yield* config.get()
       for (const pid of Object.keys(c?.provider ?? {})) {
         const prov = c.provider[pid] as any
         const ak = prov?.options?.apiKey
