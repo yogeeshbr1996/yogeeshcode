@@ -18,14 +18,41 @@
       "name": "OpenRouter free endpoints ($0)",
       "options": { "baseURL": "https://openrouter.ai/api/v1", "apiKey": "{env:OPENROUTER_API_KEY}" },
       "models": {
-        "nex-agi/Nex-N2.5-Pro:free": { "name": "Nex Pro free (agentic coding)", "limit": { "context": 262144, "output": 16000 } },
-        "deepseek/deepseek-chat:free": { "name": "DeepSeek free (executor)", "limit": { "context": 128000, "output": 8000 } },
-        "qwen/qwen3-coder:free": { "name": "Qwen3-Coder free", "limit": { "context": 128000, "output": 12000 } }
+        "nex-agi/nex-n2.5-pro:free": { "name": "Yogeesh rank 1 - Nex Pro free (agentic coding)", "limit": { "context": 262144, "output": 16000 } },
+        "z-ai/glm-4.5-air:free": { "name": "Yogeesh rank 2 - GLM 4.5 Air free (coding)", "limit": { "context": 128000, "output": 12000 } },
+        "qwen/qwen3-coder:free": { "name": "Yogeesh rank 3 - Qwen3-Coder free", "limit": { "context": 128000, "output": 12000 } },
+        "deepseek/deepseek-chat:free": { "name": "Yogeesh rank 4 - DeepSeek free (executor)", "limit": { "context": 128000, "output": 8000 } },
+        "moonshotai/kimi-k2:free": { "name": "Yogeesh rank 5 - Kimi K2 free (long context)", "limit": { "context": 200000, "output": 12000 } }
       }
+    },
+    "groq-free": {
+      "npm": "@ai-sdk/groq",
+      "name": "Groq free tier (fast executor)",
+      "options": { "apiKey": "{env:GROQ_API_KEY}" },
+      "models": {
+        "llama-3.3-70b-versatile": { "name": "Yogeesh rank 6 - Llama 70B fast", "limit": { "context": 128000, "output": 8000 } },
+        "qwen-qwq-32b": { "name": "Yogeesh rank 7 - Qwen 32B reasoning", "limit": { "context": 128000, "output": 8000 } }
+      }
+    }
+  },
+  "yogeeshcode": {
+    "model_ranker": {
+      "auto": true,
+      "order": [
+        "openrouter-free/nex-agi/nex-n2.5-pro:free",
+        "openrouter-free/z-ai/glm-4.5-air:free",
+        "openrouter-free/qwen/qwen3-coder:free",
+        "openrouter-free/deepseek/deepseek-chat:free",
+        "openrouter-free/moonshotai/kimi-k2:free",
+        "groq-free/llama-3.3-70b-versatile",
+        "ollama/qwen2.5-coder:14b"
+      ],
+      "cooldown_ms": 60000,
+      "max_attempts": 50
     }
   },
   "agent": {
     "plan": { "model": "gemini/gemini-2.5-flash", "description": "YogeeshCode planner - free tier, big context" },
-    "build": { "model": "openrouter-free/nex-agi/Nex-N2.5-Pro:free", "description": "YogeeshCode builder - free, fallback to ollama local" }
+    "build": { "model": "openrouter-free/nex-agi/nex-n2.5-pro:free", "description": "YogeeshCode builder - auto fallthrough to ranked free models, local last" }
   }
 }

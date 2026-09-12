@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "yogeeshcode-store",
+  "name": "yogeeshcode",
   "description": "YogeeshCode - AI-powered development tool (forked from sst/opencode, not affiliated with OpenCode team)",
   "private": true,
   "type": "module",

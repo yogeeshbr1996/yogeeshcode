@@ -30,6 +30,48 @@ export const RETRY_MAX_DELAY_NO_HEADERS = 30_000 // 30 seconds
 export const RETRY_MAX_DELAY = 2_147_483_647 // max 32-bit signed integer for setTimeout
 export const RETRY_MAX_RETRIES = 5
 
+// YogeeshCode: rate-limit fallthrough - never stops on 429/5xx, keeps
+// cycling with escalating backoff + per-provider cooldowns.
+export const YOGEESH_FALLTHROUGH_MAX_ATTEMPTS = 50
+export const YOGEESH_FALLTHROUGH_BASE_DELAY = 2000
+export const YOGEESH_FALLTHROUGH_MAX_DELAY = 120_000
+export const YOGEESH_COOLDOWN_MS = 60_000
+let yogeeshFallthroughRetries = YOGEESH_FALLTHROUGH_MAX_ATTEMPTS
+export function yogeeshConfigureFallthrough(maxAttempts?: number) {
+  if (maxAttempts !== undefined) yogeeshFallthroughRetries = Math.max(1, maxAttempts)
+  return yogeeshFallthroughRetries
+}
+const yogeeshCooldowns = new Map<string, number>()
+export function yogeeshCooldownKey(provider: string, model?: string) {
+  return model ? `${provider}/${model}` : provider
+}
+export function yogeeshMarkCooldown(provider: string, model?: string, ms: number = YOGEESH_COOLDOWN_MS) {
+  yogeeshCooldowns.set(yogeeshCooldownKey(provider, model), Date.now() + ms)
+}
+export function yogeeshCooldownRemaining(provider: string, model?: string): number {
+  const until = yogeeshCooldowns.get(yogeeshCooldownKey(provider, model)) ?? 0
+  return Math.max(0, until - Date.now())
+}
+export function yogeeshFallthroughDelay(attempt: number, random = Math.random()): number {
+  const base = YOGEESH_FALLTHROUGH_BASE_DELAY * Math.pow(2, Math.max(0, attempt - 1))
+  const capped = Math.min(base, YOGEESH_FALLTHROUGH_MAX_DELAY)
+  return Math.ceil(capped + capped * 0.25 * random)
+}
+export function yogeeshShouldFallthrough(error: Err): boolean {
+  if (SessionV1.ContextOverflowError.isInstance(error)) return false
+  // Rate-limit / transient provider errors are the ones free-model fallthrough handles.
+  if (SessionV1.APIError.isInstance(error)) {
+    const status = error.data.statusCode
+    if (status !== undefined && (status === 429 || status >= 500)) return true
+    if (matchesRetryableMessage(error.data.message) || matchesRetryableMessage(error.data.responseBody)) return true
+    // 401/403 with no key / exhausted balance are also worth switching away from.
+    if (status === 401 || status === 403) return true
+    return false
+  }
+  const message = isRecord(error.data) ? error.data.message : undefined
+  return typeof message === "string" && matchesRetryableMessage(message)
+}
+
 const RETRYABLE_MESSAGE_PATTERNS = [
   /429|500|502|503|504|524/i,
   /rate increased too quickly|rate limit|rate-limit|rate_limit|too many requests/i,
@@ -190,7 +232,9 @@ export function policy(opts: {
       const error = opts.parse(meta.input)
       const retry = retryable(error, opts.provider)
       if (!retry) return Cause.done(meta.attempt)
-      if (meta.attempt > RETRY_MAX_RETRIES) return Cause.done(meta.attempt)
+      // YogeeshCode: "never stops" - the bounded cap is replaced by the
+      // fallthrough cap (default 50; config yogeeshcode.model_ranker.max_attempts).
+      if (meta.attempt > yogeeshFallthroughRetries) return Cause.done(meta.attempt)
       return Effect.gen(function* () {
         const wait = delay(meta.attempt, SessionV1.APIError.isInstance(error) ? error : undefined)
         const now = yield* Clock.currentTimeMillis

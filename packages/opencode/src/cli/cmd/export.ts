@@ -7,6 +7,7 @@ import { UI } from "../ui"
 import * as prompts from "@clack/prompts"
 import { EOL } from "os"
 import { Effect } from "effect"
+import { Filesystem } from "@/util/filesystem"
 
 function redact(kind: string, id: string, value: string) {
   return value.trim() ? `[redacted:${kind}:${id}]` : value
@@ -231,13 +232,28 @@ export const ExportCommand = effectCmd({
       .option("sanitize", {
         describe: "redact sensitive transcript and file data",
         type: "boolean",
+      })
+      .option("format", {
+        describe: "YogeeshCode: json (default), txt, html, or pdf",
+        type: "string",
+        choices: ["json", "txt", "html", "pdf"],
+        default: "json",
+      })
+      .option("out", {
+        describe: "YogeeshCode: write to file instead of stdout",
+        type: "string",
       }),
   handler: Effect.fn("Cli.export")(function* (args) {
     return yield* run(args)
   }),
 })
 
-const run = Effect.fn("Cli.export.body")(function* (args: { sessionID?: string; sanitize?: boolean }) {
+const run = Effect.fn("Cli.export.body")(function* (args: {
+  sessionID?: string
+  sanitize?: boolean
+  format?: string
+  out?: string
+}) {
   const svc = yield* Session.Service
   let sessionID = args.sessionID ? SessionID.make(args.sessionID) : undefined
   process.stderr.write(`Exporting session: ${sessionID ?? "latest"}\n`)
@@ -283,6 +299,44 @@ const run = Effect.fn("Cli.export.body")(function* (args: { sessionID?: string; 
   return yield* Effect.gen(function* () {
     const sessionInfo = yield* svc.get(sessionID!)
     const messages = yield* svc.messages({ sessionID: sessionInfo.id })
+
+    const format = (args.format ?? "json").toLowerCase()
+    // YogeeshCode: txt/html/pdf transcript export, default json unchanged.
+    if (format !== "json") {
+      const { toExportMessages, renderTxt, renderHtml, renderPdf } = yield* Effect.promise(
+        () => import("@/session/export-format"),
+      )
+      const msgs = toExportMessages(messages as any)
+      const title = (sessionInfo as any).title ?? "session"
+      const sid = (sessionInfo as any).id ?? String(sessionID!)
+      const writeFile = (out: string, data: string | Uint8Array) =>
+        Effect.promise(() => Filesystem.write(out, data as any))
+      if (format === "txt") {
+        const text = renderTxt(title, sid, msgs)
+        if (args.out) yield* writeFile(args.out, text)
+        else {
+          process.stdout.write(text)
+          process.stdout.write(EOL)
+        }
+        return
+      }
+      if (format === "html") {
+        const html = renderHtml(title, sid, msgs)
+        if (args.out) yield* writeFile(args.out, html)
+        else {
+          process.stdout.write(html)
+          process.stdout.write(EOL)
+        }
+        return
+      }
+      if (format === "pdf") {
+        const bytes = renderPdf(title, sid, msgs)
+        if (args.out) yield* writeFile(args.out, bytes)
+        else process.stdout.write(Buffer.from(bytes).toString("latin1"))
+        return
+      }
+      return yield* fail(`Unknown export format: ${args.format} (use json, txt, html, pdf)`)
+    }
 
     const exportData = { info: sessionInfo, messages }
 

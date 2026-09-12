@@ -1138,7 +1138,54 @@ const layer = Layer.effect(
               history: msgs,
             }).pipe(Effect.ignore, Effect.forkIn(scope))
 
-          const model = yield* getModel(lastUser.model.providerID, lastUser.model.modelID, sessionID)
+          const primaryModel = yield* provider.getModel(lastUser.model.providerID, lastUser.model.modelID).pipe(
+            Effect.exit,
+          )
+          let model: Provider.Model
+          if (Exit.isSuccess(primaryModel)) {
+            model = primaryModel.value
+          } else {
+            // YogeeshCode: ranked free-model fallthrough - if primary model is
+            // missing/cooling down, try ranked list before failing.
+            const cfg = yield* config.get()
+            const ranker = (cfg as any)?.yogeeshcode?.model_ranker
+            if (ranker?.auto === false) return yield* Effect.die(Cause.squash(primaryModel.cause))
+            const { rankedFreeModels, parseModelRef } = yield* Effect.promise(() => import("./model-fallthrough"))
+            const { yogeeshCooldownRemaining } = yield* Effect.promise(() => import("./retry"))
+            let found: Provider.Model | undefined = undefined
+            for (const ref of rankedFreeModels(cfg)) {
+              const parsed = parseModelRef(ref)
+              if (!parsed) continue
+              if (parsed.providerID === lastUser.model.providerID && parsed.modelID === lastUser.model.modelID) continue
+              if (yogeeshCooldownRemaining(parsed.providerID, parsed.modelID) > 0) continue
+              const attempt = yield* provider
+                .getModel(ProviderV2.ID.make(parsed.providerID), ModelV2.ID.make(parsed.modelID))
+                .pipe(Effect.exit)
+              if (Exit.isSuccess(attempt)) {
+                yield* Effect.logInfo("yogeeshcode model fallthrough", {
+                  from: `${lastUser.model.providerID}/${lastUser.model.modelID}`,
+                  to: ref,
+                })
+                found = attempt.value
+                break
+              }
+            }
+            if (!found) {
+              // Publish same UX as getModel miss, then die with original cause.
+              const err = Cause.squash(primaryModel.cause)
+              if (Provider.ModelNotFoundError.isInstance(err)) {
+                const hint = err.suggestions?.length ? ` Did you mean: ${err.suggestions.join(", ")}?` : ""
+                yield* events.publish(Session.Event.Error, {
+                  sessionID,
+                  error: new NamedError.Unknown({
+                    message: `Model not found: ${err.providerID}/${err.modelID}.${hint}`,
+                  }).toObject(),
+                })
+              }
+              return yield* Effect.die(err)
+            }
+            model = found
+          }
           const task = tasks.pop()
 
           if (task?.type === "subtask") {

@@ -646,6 +646,39 @@ const layer = Layer.effect(
         ctx.needsCompaction = false
         ctx.shouldBreak = (yield* config.get()).experimental?.continue_loop_on_deny !== true
 
+        // YogeeshCode: refresh the "never stops" retry cap + cooldown from config.
+        const yogeeshCfg = (yield* config.get()) as any
+        const yogeeshRanker = yogeeshCfg?.yogeeshcode?.model_ranker
+        SessionRetry.yogeeshConfigureFallthrough(
+          typeof yogeeshRanker?.max_attempts === "number" ? yogeeshRanker.max_attempts : undefined,
+        )
+        const yogeeshMaxAttempts = SessionRetry.yogeeshConfigureFallthrough()
+        const yCooldownMs =
+          typeof yogeeshRanker?.cooldown_ms === "number" ? yogeeshRanker.cooldown_ms : SessionRetry.YOGEESH_COOLDOWN_MS
+
+        // YogeeshCode: rotate to the next ranked free model on each retry attempt.
+        let yogeeshNextRef: string | undefined = undefined
+        const yogeeshPickNextRef = Effect.fn("YogeeshCode.pickNextRef")(function* () {
+          const cfgAny = (yield* config.get()) as any
+          const ranker = cfgAny?.yogeeshcode?.model_ranker
+          if (ranker?.auto === false) return undefined
+          const cfg = yield* config.get()
+          const { rankedFreeModels, parseModelRef } = yield* Effect.promise(() => import("./model-fallthrough"))
+          const list = rankedFreeModels(cfg)
+          const start = list.findIndex((ref) => {
+            const p = parseModelRef(ref)
+            return p && p.providerID === input.model.providerID && p.modelID === input.model.id
+          })
+          for (let i = 1; i <= list.length; i++) {
+            const ref = list[(start + i) % list.length]
+            const parsed = parseModelRef(ref)
+            if (!parsed) continue
+            if (SessionRetry.yogeeshCooldownRemaining(parsed.providerID, parsed.modelID) > 0) continue
+            return ref
+          }
+          return undefined
+        })
+
         return yield* Effect.gen(function* () {
           yield* Effect.gen(function* () {
             ctx.currentText = undefined
@@ -676,12 +709,22 @@ const layer = Layer.effect(
                 provider: input.model.providerID,
                 parse,
                 set: (info) => {
-                  return status.set(ctx.sessionID, {
-                    type: "retry",
-                    attempt: info.attempt,
-                    message: info.message,
-                    action: info.action,
-                    next: info.next,
+                  // YogeeshCode: cooldown the failing model, let the next attempt
+                  // run through the next ranked free model when one is ready.
+                  SessionRetry.yogeeshMarkCooldown(input.model.providerID, input.model.id, yCooldownMs)
+                  return Effect.gen(function* () {
+                    yogeeshNextRef = yield* yogeeshPickNextRef()
+                    const message =
+                      info.attempt <= 5
+                        ? info.message
+                        : `Free tier rate limited - rotating models, attempt ${info.attempt}/${yogeeshMaxAttempts}${yogeeshNextRef ? ` -> ${yogeeshNextRef}` : ""}`
+                    return yield* status.set(ctx.sessionID, {
+                      type: "retry",
+                      attempt: info.attempt,
+                      message,
+                      action: info.action,
+                      next: info.next,
+                    })
                   })
                 },
               }),

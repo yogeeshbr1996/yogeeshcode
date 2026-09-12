@@ -1,4 +1,4 @@
-# YogeeshCode - store
+# YogeeshCode
 
 > Forked from [sst/opencode](https://github.com/sst/opencode) (MIT). Not built by, affiliated with, or endorsed by the OpenCode team.
 
