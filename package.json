@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "opencode",
-  "description": "AI-powered development tool",
+  "name": "yogeeshcode-store",
+  "description": "YogeeshCode - AI-powered development tool (forked from sst/opencode, not affiliated with OpenCode team)",
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.14",

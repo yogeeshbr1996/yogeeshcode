@@ -1,21 +1,22 @@
-# opencode VS Code Extension
+# YogeeshCode VS Code Extension
 
-A Visual Studio Code extension that integrates [opencode](https://opencode.ai) directly into your development workflow.
+YogeeshCode integrates directly into your development workflow.
+Forked from [OpenCode / sst/opencode](https://github.com/sst/opencode) - not built by, affiliated with, or endorsed by the OpenCode team.
 
 ## Prerequisites
 
-This extension requires the [opencode CLI](https://opencode.ai) to be installed on your system. Visit [opencode.ai](https://opencode.ai) for installation instructions.
+This extension requires the YogeeshCode CLI (`yogeeshcode`) to be installed on your system. Legacy `opencode` CLI also works as fallback.
 
 ## Features
 
-- **Quick Launch**: Use `Cmd+Esc` (Mac) or `Ctrl+Esc` (Windows/Linux) to open opencode in a split terminal view, or focus an existing terminal session if one is already running.
-- **New Session**: Use `Cmd+Shift+Esc` (Mac) or `Ctrl+Shift+Esc` (Windows/Linux) to start a new opencode terminal session, even if one is already open. You can also click the opencode button in the UI.
-- **Context Awareness**: Automatically share your current selection or tab with opencode.
+- **Quick Launch**: Use `Cmd+Esc` (Mac) or `Ctrl+Esc` (Windows/Linux) to open YogeeshCode in a split terminal view, or focus an existing terminal session if one is already running.
+- **New Session**: Use `Cmd+Shift+Esc` (Mac) or `Ctrl+Shift+Esc` (Windows/Linux) to start a new YogeeshCode terminal session, even if one is already open. You can also click the YogeeshCode button in the UI.
+- **Context Awareness**: Automatically share your current selection or tab with YogeeshCode.
 - **File Reference Shortcuts**: Use `Cmd+Option+K` (Mac) or `Alt+Ctrl+K` (Linux/Windows) to insert file references. For example, `@File#L37-42`.
 
 ## Support
 
-This is an early release. If you encounter issues or have feedback, please create an issue at https://github.com/anomalyco/opencode/issues.
+Forked from sst/opencode (MIT). If you encounter issues with YogeeshCode rebrand, please create an issue at https://github.com/yogeshext/opencode/issues.
 
 ## Development
 

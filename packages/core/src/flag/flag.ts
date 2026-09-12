@@ -61,7 +61,8 @@ export const Flag = {
     return process.env["OPENCODE_TUI_CONFIG"]
   },
   get OPENCODE_CONFIG_DIR() {
-    return process.env["OPENCODE_CONFIG_DIR"]
+    // YogeeshCode: new env first, legacy OPENCODE_* fallback for fork compat
+    return process.env["YOGEESHCODE_CONFIG_DIR"] ?? process.env["OPENCODE_CONFIG_DIR"]
   },
   get OPENCODE_PURE() {
     return truthy("OPENCODE_PURE")

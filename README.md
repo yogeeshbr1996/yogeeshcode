@@ -1,13 +1,21 @@
-<p align="center">
-  <a href="https://opencode.ai">
-    <picture>
-      <source srcset="packages/console/app/src/asset/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="packages/console/app/src/asset/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
-      <img src="packages/console/app/src/asset/logo-ornate-light.svg" alt="OpenCode logo">
-    </picture>
-  </a>
-</p>
-<p align="center">The open source AI coding agent.</p>
+# YogeeshCode - store
+
+> Forked from [sst/opencode](https://github.com/sst/opencode) (MIT). Not built by, affiliated with, or endorsed by the OpenCode team.
+
+<p align="center">The open source AI coding agent - YogeeshCode edition.</p>
+
+### Installation
+
+```bash
+# YogeeshCode CLI (after rebrand build)
+bun run --cwd packages/opencode src/index.ts --version
+# binary names: yogeeshcode (new) + opencode (legacy compat)
+```
+
+Original upstream install (for reference only):
+```bash
+npm i -g opencode-ai@latest
+```
 <p align="center">
   <a href="https://opencode.ai/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
   <a href="https://www.npmjs.com/package/opencode-ai"><img alt="npm" src="https://img.shields.io/npm/v/opencode-ai?style=flat-square" /></a>
@@ -122,7 +130,11 @@ If you're interested in contributing to OpenCode, please read our [contributing 
 
 ### Building on OpenCode
 
-If you are working on a project that's related to OpenCode and is using "opencode" as part of its name, for example "opencode-dashboard" or "opencode-mobile", please add a note to your README to clarify that it is not built by the OpenCode team and is not affiliated with us in any way.
+This is YogeeshCode - a fork of [sst/opencode](https://github.com/sst/opencode) with renamed binary (`yogeeshcode`), config dir (`~/.yogeeshcode`), and free-model defaults. It is not built by the OpenCode team and is not affiliated with them in any way. Upstream MIT LICENSE retained.
+
+### Free-models default
+
+See `yogeeshcode.json.example` - Ollama local `qwen2.5-coder` -> OpenRouter `:free` -> Gemini Flash, with fallback. Copy to `~/.yogeeshcode/yogeeshcode.json` or project `yogeeshcode.json`.
 
 ---
 
