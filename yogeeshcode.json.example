@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "_comment": "YogeeshCode ships FREE-MODEL-ONLY by default. All ranked models are $0.",
+  "_comment": "YogeeshCode ships FREE-MODEL-ONLY by default. All ranked models are $0. Deep-researched: Gemini, OpenRouter, Groq, Ollama, Together, DeepInfra, HuggingFace, Fireworks, Cohere, NVIDIA, Lepton, Baseten, Cerebras, Perplexity, Cloudflare, Mistral, Novita, Poe, watsonx, Vertex AI, SambaNova, Friendli, Predibase, Cortex.",
   "theme": "yogeeshcode",
   "model": "gemini-free/gemini-2.5-flash",
   "small_model": "gemini-free/gemini-2.0-flash",
@@ -501,6 +501,676 @@
           }
         }
       }
+    },
+    "fireworks": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Fireworks AI (free credits)",
+      "options": {
+        "baseURL": "https://api.fireworks.ai/inference/v1",
+        "apiKey": "{env:FIREWORKS_API_KEY}"
+      },
+      "models": {
+        "accounts/fireworks/models/llama-v3p1-70b-instruct": {
+          "name": "Llama 3.1 70B (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "accounts/fireworks/models/llama-v3p1-8b-instruct": {
+          "name": "Llama 3.1 8B (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "accounts/fireworks/models/qwen2p5-coder-32b-instruct": {
+          "name": "Qwen2.5 Coder 32B (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "accounts/fireworks/models/qwen2p5-72b-instruct": {
+          "name": "Qwen2.5 72B (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "accounts/fireworks/models/deepseek-v3": {
+          "name": "DeepSeek V3 (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "accounts/fireworks/models/deepseek-r1": {
+          "name": "DeepSeek R1 (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "accounts/fireworks/models/mixtral-8x7b-instruct": {
+          "name": "Mixtral 8x7B (Fireworks)",
+          "limit": {
+            "context": 32768,
+            "output": 4000
+          }
+        },
+        "accounts/fireworks/models/mixtral-8x22b-instruct": {
+          "name": "Mixtral 8x22B (Fireworks)",
+          "limit": {
+            "context": 65536,
+            "output": 4000
+          }
+        },
+        "accounts/fireworks/models/starcoder2-15b": {
+          "name": "StarCoder2 15B (Fireworks)",
+          "limit": {
+            "context": 16384,
+            "output": 4000
+          }
+        },
+        "accounts/fireworks/models/phi-3-mini-128k-instruct": {
+          "name": "Phi-3 Mini 128K (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "accounts/fireworks/models/phi-3-medium-128k-instruct": {
+          "name": "Phi-3 Medium 128K (Fireworks)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "cohere": {
+      "npm": "@ai-sdk/cohere",
+      "name": "Cohere free tier (Command R models)",
+      "options": {
+        "apiKey": "{env:COHERE_API_KEY}"
+      },
+      "models": {
+        "command-r-plus": {
+          "name": "Command R+ (Cohere free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "command-r": {
+          "name": "Command R (Cohere free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "command-r7b": {
+          "name": "Command R7B (Cohere free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "command-light": {
+          "name": "Command Light (Cohere free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "c4ai-aya-expanse-8b": {
+          "name": "Aya Expanse 8B (Cohere free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "c4ai-aya-expanse-32b": {
+          "name": "Aya Expanse 32B (Cohere free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM (free tier)",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "{env:NVIDIA_API_KEY}"
+      },
+      "models": {
+        "meta/llama-3.1-70b-instruct": {
+          "name": "Llama 3.1 70B (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "meta/llama-3.1-8b-instruct": {
+          "name": "Llama 3.1 8B (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "meta/llama-3.1-405b-instruct": {
+          "name": "Llama 3.1 405B (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "qwen/qwen2.5-coder-32b-instruct": {
+          "name": "Qwen2.5 Coder 32B (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "qwen/qwen2.5-72b-instruct": {
+          "name": "Qwen2.5 72B (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "deepseek-ai/deepseek-r1": {
+          "name": "DeepSeek R1 (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "deepseek-ai/deepseek-v3": {
+          "name": "DeepSeek V3 (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "microsoft/phi-3-medium-128k-instruct": {
+          "name": "Phi-3 Medium 128K (NVIDIA free)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "microsoft/phi-3-mini-128k-instruct": {
+          "name": "Phi-3 Mini 128K (NVIDIA free)",
+          "limit": {
+            "context": 131072,
+            "output": 4000
+          }
+        },
+        "google/gemma-2-27b-it": {
+          "name": "Gemma 2 27B (NVIDIA free)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "google/gemma-2-9b-it": {
+          "name": "Gemma 2 9B (NVIDIA free)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "mistralai/mistral-large": {
+          "name": "Mistral Large (NVIDIA free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "mistralai/mixtral-8x7b-instruct-v0.1": {
+          "name": "Mixtral 8x7B (NVIDIA free, 32K)",
+          "limit": {
+            "context": 32768,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "lepton": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Lepton free tier",
+      "options": {
+        "baseURL": "https://<model>.lepton.run/api/v1",
+        "apiKey": "{env:LEPTON_API_KEY}"
+      },
+      "models": {
+        "llama-3.1-70b": {
+          "name": "Llama 3.1 70B (Lepton free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "llama-3.1-8b": {
+          "name": "Llama 3.1 8B (Lepton free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "qwen2.5-coder-32b": {
+          "name": "Qwen2.5 Coder 32B (Lepton free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "qwen2.5-72b": {
+          "name": "Qwen2.5 72B (Lepton free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "deepseek-r1": {
+          "name": "DeepSeek R1 (Lepton free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "deepseek-v3": {
+          "name": "DeepSeek V3 (Lepton free, 128K)",
+          "limit": {
+            "context": 131072,
+            "output": 8000
+          }
+        },
+        "mixtral-8x7b": {
+          "name": "Mixtral 8x7B (Lepton free, 32K)",
+          "limit": {
+            "context": 32768,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "deepinfra": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DeepInfra free tier (fast GPU inference)",
+      "options": {
+        "baseURL": "https://api.deepinfra.com/v1/openai",
+        "apiKey": "{env:DEEPINFRA_API_KEY}"
+      },
+      "models": {
+        "meta-llama/Llama-3.1-70B-Instruct": {
+          "name": "Llama 3.1 70B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/Llama-3.1-8B-Instruct": {
+          "name": "Llama 3.1 8B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/Llama-3.3-70B-Instruct": {
+          "name": "Llama 3.3 70B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Qwen/Qwen2.5-Coder-32B-Instruct": {
+          "name": "Qwen2.5 Coder 32B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Qwen/Qwen2.5-72B-Instruct": {
+          "name": "Qwen2.5 72B (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {
+          "name": "DeepSeek R1 Distill (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "microsoft/Phi-3-medium-128k-instruct": {
+          "name": "Phi-3 Medium (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "microsoft/Phi-3-mini-128k-instruct": {
+          "name": "Phi-3 Mini (128K)",
+          "limit": {
+            "context": 128000,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "novita": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Novita AI free tier",
+      "options": {
+        "baseURL": "https://api.novita.ai/v3/openai",
+        "apiKey": "{env:NOVITA_API_KEY}"
+      },
+      "models": {
+        "meta-llama/llama-3.1-70b-instruct": {
+          "name": "Llama 3.1 70B (Novita free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/llama-3.1-8b-instruct": {
+          "name": "Llama 3.1 8B (Novita free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/llama-3.3-70b-instruct": {
+          "name": "Llama 3.3 70B (Novita free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "qwen/qwen-2.5-coder-32b-instruct": {
+          "name": "Qwen2.5 Coder 32B (Novita free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek/deepseek-r1-distill-llama-70b": {
+          "name": "DeepSeek R1 Distill (Novita free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "poe": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Poe (Quora) free tier - multi-model access",
+      "options": {
+        "baseURL": "https://api.poe.com/v1",
+        "apiKey": "{env:POE_API_KEY}"
+      },
+      "models": {
+        "gpt-4o-mini": {
+          "name": "GPT-4o Mini (Poe free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "claude-3-5-haiku": {
+          "name": "Claude 3.5 Haiku (Poe free)",
+          "limit": {
+            "context": 200000,
+            "output": 8000
+          }
+        },
+        "llama-3.1-70b": {
+          "name": "Llama 3.1 70B (Poe free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "qwen-2.5-coder-32b": {
+          "name": "Qwen2.5 Coder 32B (Poe free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "deepseek-r1": {
+          "name": "DeepSeek R1 (Poe free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "watsonx": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "IBM watsonx free tier",
+      "options": {
+        "baseURL": "https://us-south.ml.cloud.ibm.com/ml/v1/openai/v1",
+        "apiKey": "{env:WATSONX_API_KEY}"
+      },
+      "models": {
+        "meta-llama/llama-3-1-70b-instruct": {
+          "name": "Llama 3.1 70B (watsonx free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/llama-3-3-70b-instruct": {
+          "name": "Llama 3.3 70B (watsonx free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "ibm/granite-3-2b-instruct": {
+          "name": "Granite 3 2B (watsonx free)",
+          "limit": {
+            "context": 8000,
+            "output": 4000
+          }
+        },
+        "ibm/granite-3-8b-instruct": {
+          "name": "Granite 3 8B (watsonx free)",
+          "limit": {
+            "context": 8000,
+            "output": 4000
+          }
+        }
+      }
+    },
+    "vertex-ai": {
+      "npm": "@google/generative-ai",
+      "name": "Google Vertex AI free tier ($300 credit)",
+      "options": {
+        "apiKey": "{env:GOOGLE_CLOUD_API_KEY}"
+      },
+      "models": {
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (Vertex free tier)",
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        "gemini-2.0-flash": {
+          "name": "Gemini 2.0 Flash (Vertex free tier)",
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "sambanova": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SambaNova Cloud free tier",
+      "options": {
+        "baseURL": "https://fast-api.snova.ai/v1",
+        "apiKey": "{env:SAMBANOVA_API_KEY}"
+      },
+      "models": {
+        "Meta-Llama-3.1-70B-Instruct": {
+          "name": "Llama 3.1 70B (SambaNova free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Meta-Llama-3.1-8B-Instruct": {
+          "name": "Llama 3.1 8B (SambaNova free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Meta-Llama-3.3-70B-Instruct": {
+          "name": "Llama 3.3 70B (SambaNova free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "Qwen2.5-Coder-32B-Instruct": {
+          "name": "Qwen2.5 Coder 32B (SambaNova free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "DeepSeek-R1-Distill-Llama-70B": {
+          "name": "DeepSeek R1 Distill (SambaNova free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "friendli": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "FriendliAI free tier",
+      "options": {
+        "baseURL": "https://api.friendli.ai/serverless/v1",
+        "apiKey": "{env:FRIENDLI_API_KEY}"
+      },
+      "models": {
+        "meta-llama-3.1-70b-instruct": {
+          "name": "Llama 3.1 70B (Friendli free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama-3.1-8b-instruct": {
+          "name": "Llama 3.1 8B (Friendli free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "qwen2.5-coder-32b-instruct": {
+          "name": "Qwen2.5 Coder 32B (Friendli free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "predibase": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Predibase free tier",
+      "options": {
+        "baseURL": "https://api.predibase.com/v1",
+        "apiKey": "{env:PREDIBASE_API_KEY}"
+      },
+      "models": {
+        "meta-llama/llama-3.1-70b-instruct": {
+          "name": "Llama 3.1 70B (Predibase free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "qwen/qwen2.5-coder-32b-instruct": {
+          "name": "Qwen2.5 Coder 32B (Predibase free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "baseten": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Baseten free tier",
+      "options": {
+        "baseURL": "https://app.baseten.co/models/v1",
+        "apiKey": "{env:BASETEN_API_KEY}"
+      },
+      "models": {
+        "meta-llama/Llama-3.1-70B-Instruct": {
+          "name": "Llama 3.1 70B (Baseten free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "meta-llama/Llama-3.3-70B-Instruct": {
+          "name": "Llama 3.3 70B (Baseten free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
+    },
+    "cortex": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Cortex (Jammu) free tier - OpenAI-compatible",
+      "options": {
+        "baseURL": "https://api.cortex.ai/v1",
+        "apiKey": "{env:CORTEX_API_KEY}"
+      },
+      "models": {
+        "gpt-4o-mini": {
+          "name": "GPT-4o Mini (Cortex free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        },
+        "claude-3.5-haiku": {
+          "name": "Claude 3.5 Haiku (Cortex free)",
+          "limit": {
+            "context": 200000,
+            "output": 8000
+          }
+        },
+        "llama-3.1-70b": {
+          "name": "Llama 3.1 70B (Cortex free)",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          }
+        }
+      }
     }
   },
   "yogeeshcode": {
@@ -549,6 +1219,31 @@
         "openrouter-free/mistralai/mistral-7b-instruct:free",
         "openrouter-free/openchat/openchat-7b:free",
         "openrouter-free/google/gemini-2.0-flash:free",
+        "deepinfra/meta-llama/Llama-3.3-70B-Instruct",
+        "deepinfra/Qwen/Qwen2.5-Coder-32B-Instruct",
+        "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+        "novita/meta-llama/llama-3.3-70b-instruct",
+        "novita/qwen/qwen-2.5-coder-32b-instruct",
+        "novita/deepseek/deepseek-r1-distill-llama-70b",
+        "poe/gpt-4o-mini",
+        "poe/claude-3-5-haiku",
+        "poe/qwen-2.5-coder-32b",
+        "poe/deepseek-r1",
+        "watsonx/meta-llama/llama-3-3-70b-instruct",
+        "watsonx/ibm/granite-3-8b-instruct",
+        "vertex-ai/gemini-2.5-flash",
+        "vertex-ai/gemini-2.0-flash",
+        "sambanova/Meta-Llama-3.3-70B-Instruct",
+        "sambanova/Qwen2.5-Coder-32B-Instruct",
+        "sambanova/DeepSeek-R1-Distill-Llama-70B",
+        "friendli/meta-llama-3.1-70b-instruct",
+        "friendli/qwen2.5-coder-32b-instruct",
+        "predibase/meta-llama/llama-3.1-70b-instruct",
+        "predibase/qwen/qwen2.5-coder-32b-instruct",
+        "baseten/meta-llama/Llama-3.3-70B-Instruct",
+        "cortex/gpt-4o-mini",
+        "cortex/claude-3.5-haiku",
+        "cortex/llama-3.1-70b",
         "ollama/qwen2.5-coder:14b",
         "ollama/qwen3-coder:30b",
         "ollama/qwen2.5-coder:7b",
@@ -559,10 +1254,24 @@
         "ollama/llama3.1:8b",
         "openrouter-free/undi95/toppy-m-7b:free",
         "openrouter-free/sophosympatheia/rogue-rose-103b-v0.2:free",
-        "openrouter-free/gryphe/mythomax-l2-13b:free"
+        "openrouter-free/gryphe/mythomax-l2-13b:free",
+        "fireworks/accounts/fireworks/models/llama-v3p1-70b-instruct",
+        "fireworks/accounts/fireworks/models/qwen2p5-coder-32b-instruct",
+        "fireworks/accounts/fireworks/models/deepseek-r1",
+        "cohere/command-r-plus",
+        "cohere/command-r",
+        "cohere/command-r7b",
+        "cohere/c4ai-aya-expanse-32b",
+        "nvidia/meta/llama-3.1-70b-instruct",
+        "nvidia/qwen/qwen2.5-coder-32b-instruct",
+        "nvidia/deepseek-ai/deepseek-r1",
+        "nvidia/mistralai/mistral-large",
+        "lepton/llama-3.1-70b",
+        "lepton/qwen2.5-coder-32b",
+        "lepton/deepseek-r1"
       ],
       "cooldown_ms": 60000,
-      "max_attempts": 100
+      "max_attempts": 200
     }
   },
   "agent": {
