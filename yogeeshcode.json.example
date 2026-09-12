@@ -1175,6 +1175,7 @@
   },
   "yogeeshcode": {
     "free_models_only": true,
+    "auto_refresh_min": 720,
     "model_ranker": {
       "auto": true,
       "order": [

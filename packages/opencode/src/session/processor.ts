@@ -656,6 +656,29 @@ const layer = Layer.effect(
         const yCooldownMs =
           typeof yogeeshRanker?.cooldown_ms === "number" ? yogeeshRanker.cooldown_ms : SessionRetry.YOGEESH_COOLDOWN_MS
 
+        // YogeeshCode: auto-refresh free-model registry every 12h (default).
+        const yogeeshAutoRefreshMin = typeof yogeeshCfg?.yogeeshcode?.auto_refresh_min === "number" ? yogeeshCfg.yogeeshcode.auto_refresh_min : 720
+        const refreshEffect = Effect.tryPromise({
+          try: async () => {
+            const { getCachedSnapshot, shouldAutoRefresh, getOrRefresh } = await import("@/provider/model-registry")
+            const snap = getCachedSnapshot()
+            if (shouldAutoRefresh(snap)) {
+              const apiKeys: Record<string, string> = {}
+              for (const pid of Object.keys(yogeeshCfg?.provider ?? {})) {
+                const prov = (yogeeshCfg.provider as any)[pid] as any
+                const ak = prov?.options?.apiKey
+                if (typeof ak === "string" && ak.startsWith("{") && ak.endsWith("}")) {
+                  const envKey = ak.slice(1, -1).replace(/^env:/, "")
+                  apiKeys[pid] = process.env[envKey] ?? ""
+                }
+              }
+              await getOrRefresh(apiKeys, false, yogeeshAutoRefreshMin * 60 * 1000)
+            }
+          },
+          catch: () => new Error("registry refresh failed"),
+        }).pipe(Effect.ignore)
+        yield* Effect.forkDaemon(refreshEffect).pipe(Effect.asVoid)
+
         // YogeeshCode: rotate to the next ranked free model on each retry attempt.
         let yogeeshNextRef: string | undefined = undefined
         const yogeeshPickNextRef = Effect.fn("YogeeshCode.pickNextRef")(function* () {
