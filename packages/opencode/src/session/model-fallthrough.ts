@@ -7,6 +7,7 @@ export function parseModelRef(ref: string): ModelRef | undefined {
   return { providerID: ref.slice(0, idx), modelID: ref.slice(idx + 1) }
 }
 export const DEFAULT_RANKED_FREE_MODELS: string[] = [
+  "pollinations-noauth/openai",
   "opencode/big-pickle",
   "gemini-free/gemini-2.5-flash",
   "opencode/grok-code",
