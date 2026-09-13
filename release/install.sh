@@ -1,24 +1,23 @@
 #!/usr/bin/env bash
 # YogeeshCode one-click installer - auto-detects OS + architecture.
-# curl -fsSL https://raw.githubusercontent.com/yogeeshbr1996/yogeeshcode/main/release/install.sh | bash
 set -euo pipefail
 VER="$(cd "$(dirname "$0")" && cat version.txt)"
-OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+OS="$(uname -s | tr '[:upper:' '[:lower:')"
 ARCH="$(uname -m)"
 case "$ARCH" in arm64|aarch64) ARCH="arm64" ;; x86_64|amd64) ARCH="x64" ;; esac
 case "$OS" in
-  linux) ARCHIVE="yogeeshcode-${VER}-${OS}-${ARCH}.tar.gz" ;;
-  darwin) ARCHIVE="yogeeshcode-${VER}-${OS}-${ARCH}.zip" ;;
+  darwin|linux) ARCHIVE="yogeeshcode-${VER}-${OS}-${ARCH}.tar.gz" ;;
   mingw*|msys*|cygwin*) ARCHIVE="yogeeshcode-${VER}-windows-${ARCH}.zip" ;;
   *) echo "Unsupported OS: $OS"; exit 1 ;;
 esac
+# Normalize OS name for archive lookup (uname returns Darwin/Linux)
+OS_LOWER="$(echo "$OS" | tr '[:upper:]' '[:lower:]')"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 LOCAL_BIN="$HOME/.local/bin"
 mkdir -p "$LOCAL_BIN"
 echo "YogeeshCode installer"
 echo "  version : $VER"
 echo "  os      : $OS-$ARCH"
-echo "  archive : $ARCHIVE"
 if [ -f "$DIR/$ARCHIVE" ]; then
   echo "  -> installing from local"
   TMP="$(mktemp -d)"
