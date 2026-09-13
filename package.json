@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "yogeeshcode",
   "yogeeshcode": {
-    "version": "1.0.0.3",
+    "version": "1.0.0.4",
     "base": "opencode",
     "base_version": "1.18.30"
   },
