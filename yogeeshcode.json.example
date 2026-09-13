@@ -36,6 +36,27 @@
     "doom_loop": "ask"
   },
   "provider": {
+    "opencode": {
+      "name": "OpenCode Zen - OUR OWN free tier (31 free models, auth via: yogeeshcode auth login - device OAuth, NO API key)",
+      "models": {
+        "big-pickle": { "name": "Zen big-pickle - flagship free coder, 200K", "limit": { "context": 200000, "output": 32000 } },
+        "grok-code": { "name": "Zen grok-code - free agentic coder, 256K", "limit": { "context": 256000, "output": 16000 } },
+        "nemotron-3-ultra-free": { "name": "Zen Nemotron 3 Ultra - free, 1M ctx", "limit": { "context": 1000000, "output": 32000 } },
+        "qwen3.6-plus-free": { "name": "Zen Qwen3.6 Plus - free, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "minimax-m2.1-free": { "name": "Zen MiniMax M2.1 - free, 204K", "limit": { "context": 204800, "output": 16000 } },
+        "deepseek-v4-flash-free": { "name": "Zen DeepSeek V4 Flash - free, 200K", "limit": { "context": 200000, "output": 16000 } },
+        "glm-5-free": { "name": "Zen GLM-5 - free, 204K", "limit": { "context": 204800, "output": 16000 } },
+        "kimi-k2.5-free": { "name": "Zen Kimi K2.5 - free, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "longcat-2.0-free": { "name": "Zen LongCat 2.0 - free, 1M ctx", "limit": { "context": 1000000, "output": 32000 } },
+        "mimo-v2-pro-free": { "name": "Zen MiMo V2 Pro - free, 1M ctx", "limit": { "context": 1048576, "output": 32000 } },
+        "ling-3.0-flash-free": { "name": "Zen Ling 3.0 Flash - free, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "muse-spark-1.3-contributor-free": { "name": "Zen Muse Spark 1.3 contributor - free, 1M ctx", "limit": { "context": 1048576, "output": 32000 } },
+        "glm-4.7-free": { "name": "Zen GLM-4.7 - free, 204K", "limit": { "context": 204800, "output": 16000 } },
+        "nemotron-3-super-free": { "name": "Zen Nemotron 3 Super - free, 204K", "limit": { "context": 204800, "output": 16000 } },
+        "minimax-m2.5-free": { "name": "Zen MiniMax M2.5 - free, 204K", "limit": { "context": 204800, "output": 16000 } },
+        "minimax-m3-free": { "name": "Zen MiniMax M3 - free, 200K", "limit": { "context": 200000, "output": 16000 } }
+      }
+    },
     "gemini-free": {
       "npm": "@ai-sdk/google",
       "name": "Google AI Studio free tier (key: aistudio.google.com)",
@@ -170,7 +191,13 @@
     "model_ranker": {
       "auto": true,
       "order": [
+        "opencode/big-pickle",
         "gemini-free/gemini-2.5-flash",
+        "opencode/grok-code",
+        "opencode/nemotron-3-ultra-free",
+        "opencode/qwen3.6-plus-free",
+        "opencode/minimax-m2.1-free",
+        "opencode/deepseek-v4-flash-free",
         "glm-free/glm-4.5-flash",
         "modelscope-free/Qwen/Qwen3-Coder-480B-A35B-Instruct",
         "github-models/openai/gpt-4o-mini",
@@ -194,8 +221,8 @@
     }
   },
   "agent": {
-    "plan": { "model": "gemini-free/gemini-2.5-flash", "description": "YogeeshCode planner - Gemini free tier, 1M context" },
-    "build": { "model": "gemini-free/gemini-2.5-flash", "description": "YogeeshCode builder - falls through ranked free models on rate limits" }
+    "plan": { "model": "opencode/big-pickle", "description": "YogeeshCode planner - Zen big-pickle free flagship (yogeeshcode auth login)" },
+    "build": { "model": "opencode/big-pickle", "description": "YogeeshCode builder - Zen free, falls through 23 ranked free models on rate limits" }
   }
 }
 
