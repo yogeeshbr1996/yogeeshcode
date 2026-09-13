@@ -16,9 +16,12 @@ import { isOverflow } from "./overflow"
 import { PartID } from "./schema"
 import type { SessionID } from "./schema"
 import { SessionRetry } from "./retry"
+import { parseModelRef } from "./model-fallthrough"
 import { SessionStatus } from "./status"
 import { SessionSummary } from "./summary"
-import type { Provider } from "@/provider/provider"
+import { Provider } from "@/provider/provider"
+import { ModelV2 } from "@opencode-ai/core/model"
+import { ProviderV2 } from "@opencode-ai/core/provider"
 import { Question } from "@/question"
 import { errorMessage } from "@/util/error"
 import { isRecord } from "@/util/record"
@@ -83,6 +86,7 @@ const layer = Layer.effect(
   Effect.gen(function* () {
     const session = yield* Session.Service
     const config = yield* Config.Service
+    const provider = yield* Provider.Service
     const snapshot = yield* Snapshot.Service
     const agents = yield* Agent.Service
     const llm = yield* LLM.Service
@@ -680,7 +684,10 @@ const layer = Layer.effect(
         yield* Effect.forkDetach(yogeeshRefreshEffect).pipe(Effect.asVoid)
 
         // YogeeshCode: rotate to the next ranked free model on each retry attempt.
+        // yogeeshCurrentRef tracks the LIVE model (updated on each real swap) so
+        // rotation always continues from wherever we are, not the original model.
         let yogeeshNextRef: string | undefined = undefined
+        let yogeeshCurrentRef = `${input.model.providerID}/${input.model.id}`
         const yogeeshPickNextRef = Effect.fn("YogeeshCode.pickNextRef")(function* () {
           const cfgAny = (yield* config.get()) as any
           const ranker = cfgAny?.yogeeshcode?.model_ranker
@@ -688,14 +695,17 @@ const layer = Layer.effect(
           const cfg = yield* config.get()
           const { rankedFreeModels, parseModelRef } = yield* Effect.promise(() => import("./model-fallthrough"))
           const list = rankedFreeModels(cfg)
+          const [curProvider, ...curModelParts] = yogeeshCurrentRef.split("/")
+          const curModelID = curModelParts.join("/")
           const start = list.findIndex((ref) => {
             const p = parseModelRef(ref)
-            return p && p.providerID === input.model.providerID && p.modelID === input.model.id
+            return p && p.providerID === curProvider && p.modelID === curModelID
           })
           for (let i = 1; i <= list.length; i++) {
             const ref = list[(start + i) % list.length]
             const parsed = parseModelRef(ref)
             if (!parsed) continue
+            if (parsed.providerID === curProvider && parsed.modelID === curModelID) continue
             if (SessionRetry.yogeeshCooldownRemaining(parsed.providerID, parsed.modelID) > 0) continue
             return ref
           }
@@ -732,15 +742,32 @@ const layer = Layer.effect(
                 provider: input.model.providerID,
                 parse,
                 set: (info) => {
-                  // YogeeshCode: cooldown the failing model, let the next attempt
-                  // run through the next ranked free model when one is ready.
-                  SessionRetry.yogeeshMarkCooldown(input.model.providerID, input.model.id, yCooldownMs)
+                  // YogeeshCode: cooldown the failing LIVE model (tracked in
+                  // yogeeshCurrentRef, not the original input.model), then
+                  // actually swap streamInput.model so the next retry attempt
+                  // runs on the new ranked free model. llm.stream(streamInput)
+                  // re-reads streamInput.model on every attempt, so this is a
+                  // REAL model switch, not just a status message.
+                  const [failProvider, ...failModelParts] = yogeeshCurrentRef.split("/")
+                  SessionRetry.yogeeshMarkCooldown(failProvider, failModelParts.join("/"), yCooldownMs)
                   return Effect.gen(function* () {
                     yogeeshNextRef = yield* yogeeshPickNextRef()
+                    if (yogeeshNextRef) {
+                      const parsed = parseModelRef(yogeeshNextRef)
+                      if (parsed) {
+                        const attempt = yield* provider
+                          .getModel(ProviderV2.ID.make(parsed.providerID), ModelV2.ID.make(parsed.modelID))
+                          .pipe(Effect.exit)
+                        if (Exit.isSuccess(attempt)) {
+                          streamInput.model = attempt.value
+                          yogeeshCurrentRef = yogeeshNextRef
+                        }
+                      }
+                    }
                     const message =
                       info.attempt <= 5
                         ? info.message
-                        : `Free tier rate limited - rotating models, attempt ${info.attempt}/${yogeeshMaxAttempts}${yogeeshNextRef ? ` -> ${yogeeshNextRef}` : ""}`
+                        : `Free tier rate limited - rotating models, attempt ${info.attempt}/${yogeeshMaxAttempts}${yogeeshNextRef ? ` -> now on ${yogeeshCurrentRef}` : ""}`
                     return yield* status.set(ctx.sessionID, {
                       type: "retry",
                       attempt: info.attempt,
@@ -782,6 +809,7 @@ export const node = LayerNode.make({
   deps: [
     Session.node,
     Config.node,
+    Provider.node,
     Snapshot.node,
     Agent.node,
     LLM.node,
