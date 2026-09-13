@@ -8,6 +8,7 @@ import { DialogVariant } from "./dialog-variant"
 import * as fuzzysort from "fuzzysort"
 import { useConnected } from "./use-connected"
 import { useSync } from "../context/sync"
+import { yogModelVisible } from "../util/yogeesh-model-tiers"
 
 export function DialogModel(props: { providerID?: string }) {
   const local = useLocal()
@@ -19,6 +20,12 @@ export function DialogModel(props: { providerID?: string }) {
   const providers = createDialogProviderOptions()
 
   const showExtra = createMemo(() => connected() && !props.providerID)
+
+  // YogeeshCode: auth-gated visibility context for the picker.
+  const connectedIDs = createMemo(() => new Set(sync.data.provider_next.connected ?? []))
+  const allowPaid = createMemo(
+    () => (sync.data.config as unknown as { yogeeshcode?: { paid_models?: { allow_paid?: boolean } } })?.yogeeshcode?.paid_models?.allow_paid === true,
+  )
 
   const options = createMemo(() => {
     const needle = query().trim()
@@ -33,6 +40,9 @@ export function DialogModel(props: { providerID?: string }) {
         if (!provider) return []
         const model = provider.models[item.modelID]
         if (!model) return []
+        // YogeeshCode: keep favorites/recents consistent with the picker filter.
+        if (!yogModelVisible(provider.id, model, { connected: connectedIDs().has(provider.id), allowPaid: allowPaid() }))
+          return []
         return [
           {
             key: item,
@@ -70,6 +80,12 @@ export function DialogModel(props: { providerID?: string }) {
           entries(),
           filter(([_, info]) => info.status !== "deprecated"),
           filter(([_, info]) => (props.providerID ? info.providerID === props.providerID : true)),
+          // YogeeshCode: hide free-tier/paid providers until the user adds that
+          // provider's auth (API key/OAuth/env). Zero-auth FREE providers and the
+          // config-defined pollinations-noauth provider always stay visible.
+          // Free-tier providers unlock automatically on auth; paid need opt-in
+          // via yogeeshcode.paid_models.allow_paid (default false).
+          filter(([_, info]) => yogModelVisible(provider.id, info, { connected: connectedIDs().has(provider.id), allowPaid: allowPaid() })),
           map(([model, info]) => ({
             value: { providerID: provider.id, modelID: model },
             title: info.name ?? model,

@@ -196,6 +196,10 @@
   },
   "yogeeshcode": {
     "free_models_only": true,
+    "paid_models": {
+      "_comment": "Tier 3 (PAID, token cost > $0). Default OFF: paid models stay HIDDEN in the picker/CLI until you set allow_paid: true AND connect that provider's auth. Tier 1 (FREE, zero-auth) always visible. Tier 2 (FREE TIER, auth needed) appears automatically once you add that provider's auth - no flag needed.",
+      "allow_paid": false
+    },
     "model_ranker": {
       "auto": true,
       "order": [
