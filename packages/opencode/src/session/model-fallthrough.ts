@@ -25,20 +25,31 @@ export function parseModelRef(ref: string): ModelRef | undefined {
   return { providerID: ref.slice(0, idx), modelID: ref.slice(idx + 1) }
 }
 export const DEFAULT_RANKED_FREE_MODELS: string[] = [
-  // Tier 1: OpenCode Zen FREE (models.dev, tool_call=true, cost 0/0).
-  // big-pickle = default agent model. Order: flagship -> 1M-ctx giants -> coders.
+  // Tier 1: OpenCode Zen FREE (models.dev, tool_call=true, cost 0/0) -
+  // 31 total, zero-auth (apiKey:"public"). All listed below verified live.
+  // big-pickle = default agent model. Order: flagship -> 1M-ctx giants -> big-out coders.
   "opencode/big-pickle",
+  "opencode/muse-spark-1.3-contributor-free",
+  "opencode/muse-spark-1.2-contributor-free",
+  "opencode/x-preview-f-free",
   "opencode/nemotron-3-ultra-free",
   "opencode/longcat-2.0-free",
   "opencode/mimo-v2-pro-free",
   "opencode/grok-code",
+  "opencode/nemotron-3.5-lightning-free",
+  "opencode/kimi-k2.5-free",
   "opencode/qwen3.6-plus-free",
+  "opencode/ring-2.6-1t-free",
+  "opencode/north-mini-code-free",
+  "opencode/hy3-preview-free",
+  "opencode/glm-5-free",
+  "opencode/glm-4.7-free",
+  "opencode/minimax-m2.5-free",
   "opencode/minimax-m2.1-free",
   "opencode/deepseek-v4-flash-free",
-  "opencode/glm-5-free",
-  "opencode/kimi-k2.5-free",
   "opencode/ling-3.0-flash-free",
-  "opencode/muse-spark-1.3-contributor-free",
+  "opencode/minimax-m3-free",
+  "opencode/trinity-large-preview-free",
   // Tier 2: free-tier with API key (config-defined providers).
   "pollinations-noauth/openai",
   "gemini-free/gemini-2.5-flash",
