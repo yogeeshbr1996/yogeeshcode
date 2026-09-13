@@ -8,7 +8,7 @@ import { DialogVariant } from "./dialog-variant"
 import * as fuzzysort from "fuzzysort"
 import { useConnected } from "./use-connected"
 import { useSync } from "../context/sync"
-import { yogModelVisible } from "../util/yogeesh-model-tiers"
+import { yogModelVisible, yogFooter } from "../util/yogeesh-model-tiers"
 
 export function DialogModel(props: { providerID?: string }) {
   const local = useLocal()
@@ -51,6 +51,7 @@ export function DialogModel(props: { providerID?: string }) {
             description: provider.name,
             category,
             disabled: provider.id === "opencode" && model.id.includes("-nano"),
+            // YogeeshCode: favorites keep the old "Free" badge for Zen free models.
             footer: model.cost?.input === 0 && provider.id === "opencode" ? "Free" : undefined,
             onSelect: () => {
               onSelect(provider.id, model.id)
@@ -93,9 +94,10 @@ export function DialogModel(props: { providerID?: string }) {
             description: favorites.some((item) => item.providerID === provider.id && item.modelID === model)
               ? "(Favorite)"
               : undefined,
+            // YogeeshCode: footer shows tier + token budget: FREE 1M / FREE-TIER 262K / PAID 200K,
+            // plus per-call output cap (out 32K) - output matters most for code gen.
+            footer: yogFooter(provider.id, info),
             category: connected() ? provider.name : undefined,
-            disabled: provider.id === "opencode" && model.includes("-nano"),
-            footer: info.cost?.input === 0 && provider.id === "opencode" ? "Free" : undefined,
             onSelect() {
               onSelect(provider.id, model)
             },
@@ -204,8 +206,12 @@ export function sortModelOptions<T extends { footer?: string; releaseDate: strin
   newestFirst: boolean,
 ) {
   if (newestFirst) return sortBy(options, [(option) => option.releaseDate, "desc"], (option) => option.title)
+  // YogeeshCode: Free tiers float to the top (FREE before FREE-TIER before PAID),
+  // then biggest token budget first - tokens are the #1 lever for coding.
+  const tierRank = (footer?: string) => (footer?.startsWith("FREE ") ? 0 : footer?.startsWith("FREE-TIER") ? 1 : 2)
   return sortBy(
     options,
+    (option) => tierRank(option.footer),
     (option) => option.footer !== "Free",
     [(option) => option.releaseDate, "desc"],
     (option) => option.title,

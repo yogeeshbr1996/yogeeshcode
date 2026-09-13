@@ -11,7 +11,11 @@
 // Cost heuristic: cost.input > 0 / cost.output > 0 means paid tokens.
 export const YOG_FREE_ALWAYS_VISIBLE_PROVIDER_IDS = new Set(["opencode", "pollinations-noauth"])
 
-export type YogSyncModel = { cost?: { input?: number; output?: number }; status?: string }
+export type YogSyncModel = {
+  cost?: { input?: number; output?: number }
+  limit?: { context?: number; input?: number; output?: number }
+  status?: string
+}
 
 export type YogTier = "free" | "free-tier" | "paid"
 
@@ -33,4 +37,21 @@ export function yogModelVisible(
   if (tier === "free") return true
   if (tier === "paid") return (opts.connected ?? false) && (opts.allowPaid ?? false)
   return opts.connected ?? false
+}
+
+// YogeeshCode: compact token-budget footer for the picker.
+// Format: "FREE 1M | out 32K" - ctx = window size, out = per-call generation cap.
+// Tokens are the #1 lever for coding: bigger ctx = whole repo in memory,
+// bigger out = full files generated without truncation.
+export function yogTokens(n?: number): string {
+  if (n === undefined || n === null || Number.isNaN(n)) return "?"
+  if (n >= 1000000) return `${(n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1)}M`
+  if (n >= 1000) return `${Math.round(n / 1000)}K`
+  return `${n}`
+}
+
+export function yogFooter(providerID: string, model?: YogSyncModel): string {
+  const tier = yogTierOf(providerID, model)
+  const tag = tier === "free" ? "FREE" : tier === "free-tier" ? "FREE-TIER" : "PAID"
+  return `${tag} ${yogTokens(model?.limit?.context)} | out ${yogTokens(model?.limit?.output)}`
 }

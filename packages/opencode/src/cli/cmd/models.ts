@@ -27,6 +27,11 @@ export const ModelsCommand = effectCmd({
         describe: "filter by YogeeshCode tier: free (zero-auth) | free-tier (auth added) | paid (opt-in via yogeeshcode.paid_models.allow_paid) | all",
         type: "string",
         choices: ["free", "free-tier", "paid", "all"],
+      })
+      .option("biggest", {
+        describe: "sort by biggest context window first (shows ctx/input/output token limits per model)",
+        type: "boolean",
+        default: false,
       }),
   handler: Effect.fn("Cli.models")(function* (args) {
     const { Provider } = yield* Effect.promise(() => import("@/provider/provider"))
@@ -80,17 +85,32 @@ export const ModelsCommand = effectCmd({
       return tier === "free" ? "  [FREE]" : tier === "free-tier" ? "  [FREE TIER - needs auth]" : "  [PAID]"
     }
 
+    const fmtTokens = (n?: number) => {
+      if (n === undefined || n === null || Number.isNaN(n)) return "?"
+      if (n >= 1000000) return `${(n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1)}M`
+      if (n >= 1000) return `${Math.round(n / 1000)}K`
+      return `${n}`
+    }
+
     const provider = yield* Provider.Service
     const providers = yield* provider.list()
 
+    const biggest = (args.biggest as boolean | undefined) ?? false
     const print = (providerID: ProviderV2.ID, verbose?: boolean) => {
       const p = providers[providerID]
-      const sorted = Object.entries(p.models).sort(([a], [b]) => a.localeCompare(b))
+      const entries = Object.entries(p.models)
+      const sorted = biggest
+        ? entries.sort(([, a], [, b]) => ((b as any)?.limit?.context ?? 0) - ((a as any)?.limit?.context ?? 0))
+        : entries.sort(([a], [b]) => a.localeCompare(b))
       let shown = 0
       for (const [modelID, model] of sorted) {
         if (!visible(String(providerID), (model as any)?.cost)) continue
         shown++
-        process.stdout.write(`${providerID}/${modelID}${header(String(providerID), (model as any)?.cost)}`)
+        const lim = (model as any)?.limit as { context?: number; input?: number; output?: number } | undefined
+        const tokens = biggest
+          ? `  [ctx ${fmtTokens(lim?.context)} / in ${fmtTokens(lim?.input ?? lim?.context)} / out ${fmtTokens(lim?.output)}]`
+          : ""
+        process.stdout.write(`${providerID}/${modelID}${tokens}${header(String(providerID), (model as any)?.cost)}`)
         process.stdout.write(EOL)
         if (verbose) {
           process.stdout.write(JSON.stringify(model, null, 2))
