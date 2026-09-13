@@ -84,6 +84,41 @@
         "glm-4-flash": { "name": "GLM-4-Flash - 100% free forever", "limit": { "context": 128000, "output": 8000 } }
       }
     },
+"openrouter-free-3": {
+      "_comment": "QUOTA POOL slot #3 - SAME OpenRouter :free models, THIRD key (OPENROUTER_API_KEY_3). Copy for #4/#5...",
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter :free - $0 key #3",
+      "options": { "baseURL": "https://openrouter.ai/api/v1", "apiKey": "{env:OPENROUTER_API_KEY_3}" },
+      "models": {
+        "nex-agi/nex-n2.5-pro:free": { "name": "Nex N2.5 Pro - key #3, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "qwen/qwen3-coder:free": { "name": "Qwen3 Coder - key #3, 128K", "limit": { "context": 131072, "output": 12000 } },
+        "deepseek/deepseek-chat-v3.1:free": { "name": "DeepSeek V3.1 - key #3, 128K", "limit": { "context": 131072, "output": 8000 } },
+        "z-ai/glm-4.5-air:free": { "name": "GLM 4.5 Air - key #3, 128K", "limit": { "context": 131072, "output": 12000 } }
+      }
+    },
+"openrouter-free": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter :free - $0 key #1 (key: openrouter.ai; 50 req/day, 1000/day if ever bought $10 credit)",
+      "options": { "baseURL": "https://openrouter.ai/api/v1", "apiKey": "{env:OPENROUTER_API_KEY}" },
+      "models": {
+        "nex-agi/nex-n2.5-pro:free": { "name": "Nex N2.5 Pro - agentic coding tuned, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "nex-agi/nex-n2.5-mini:free": { "name": "Nex N2.5 Mini - agentic, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "qwen/qwen3-coder:free": { "name": "Qwen3 Coder - purpose-built coder, 128K", "limit": { "context": 131072, "output": 12000 } },
+        "deepseek/deepseek-chat-v3.1:free": { "name": "DeepSeek V3.1 - strong executor, 128K", "limit": { "context": 131072, "output": 8000 } },
+        "z-ai/glm-4.5-air:free": { "name": "GLM 4.5 Air - hybrid reasoning, 131K", "limit": { "context": 131072, "output": 8000 } }
+      }
+    },
+    "openrouter-free-2": {
+      "_comment": "QUOTA POOL slot #2 - SAME OpenRouter :free models, SECOND key (OPENROUTER_API_KEY_2). Each key = independent 50 req/day. The model ranker tries key #1, then key #2 for the SAME model before moving to the next model. Copy this block for key #3 (#4, ...).",
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter :free - $0 key #2",
+      "options": { "baseURL": "https://openrouter.ai/api/v1", "apiKey": "{env:OPENROUTER_API_KEY_2}" },
+      "models": {
+        "nex-agi/nex-n2.5-pro:free": { "name": "Nex N2.5 Pro - key #2, 262K", "limit": { "context": 262144, "output": 16000 } },
+        "qwen/qwen3-coder:free": { "name": "Qwen3 Coder - key #2, 128K", "limit": { "context": 131072, "output": 12000 } },
+        "deepseek/deepseek-chat-v3.1:free": { "name": "DeepSeek V3.1 - key #2, 128K", "limit": { "context": 131072, "output": 8000 } }
+      }
+    },
     "openrouter-free": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "OpenRouter :free - $0 (key: openrouter.ai; 50 req/day, 1000/day if ever bought $10 credit)",
@@ -196,6 +231,10 @@
   },
   "yogeeshcode": {
     "free_models_only": true,
+    "keyring": {
+      "_comment": "QUOTA POOL - same models, multiple keys, N x daily limits. Each slot = independent API key quota. Ranker expands 'openrouter-free/<model>' to also try 'openrouter-free-2/<model>' (key #2), 'openrouter-free-3/<model>', etc. before moving to the next model.",
+      "openrouter-free": ["openrouter-free-2", "openrouter-free-3"]
+    },
     "paid_models": {
       "_comment": "Tier 3 (PAID, token cost > $0). Default OFF: paid models stay HIDDEN in the picker/CLI until you set allow_paid: true AND connect that provider's auth. Tier 1 (FREE, zero-auth) always visible. Tier 2 (FREE TIER, auth needed) appears automatically once you add that provider's auth - no flag needed.",
       "allow_paid": false

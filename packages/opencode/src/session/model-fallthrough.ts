@@ -77,6 +77,28 @@ export const DEFAULT_RANKED_FREE_MODELS: string[] = [
 ]
 export function rankedFreeModels(config: any): string[] {
   const order = config?.yogeeshcode?.model_ranker?.order
-  if (Array.isArray(order) && order.length > 0) return order.filter((x: unknown) => typeof x === "string")
-  return DEFAULT_RANKED_FREE_MODELS
+  const base =
+    Array.isArray(order) && order.length > 0 ? order.filter((x: unknown) => typeof x === "string") : DEFAULT_RANKED_FREE_MODELS
+  // YogeeshCode: quota-pool expansion. Users can clone a free-tier provider
+  // under multiple ids sharing one baseURL, each with its OWN key:
+  //   "openrouter-free-2": { baseURL: https://openrouter.ai/api/v1, apiKey: KEY2 ... }
+  // If any ranked entry points at the SAME underlying model through a
+  // different provider id, expand it: try model on key-1, then key-2...
+  // before moving to the next model. This is how one model gets N x quota.
+  const keyring = config?.yogeeshcode?.keyring
+  if (!keyring || typeof keyring !== "object") return base
+  const out: string[] = []
+  for (const ref of base) {
+    out.push(ref)
+    const parsed = parseModelRef(ref)
+    if (!parsed) continue
+    const clones: unknown = (keyring as Record<string, unknown>)[parsed.providerID]
+    if (!Array.isArray(clones)) continue
+    for (const clone of clones) {
+      if (typeof clone === "string" && clone.length > 0 && clone !== parsed.providerID) {
+        out.push(`${clone}/${parsed.modelID}`)
+      }
+    }
+  }
+  return out
 }
