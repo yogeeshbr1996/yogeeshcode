@@ -97,6 +97,8 @@ case "$OS" in
   mingw*|msys*|cygwin*) ARCHIVE="yogeeshcode-${VER}-windows-${ARCH}.zip" ;;
   *) echo "Unsupported OS: $OS"; exit 1 ;;
 esac
+# Normalize OS name for archive lookup (uname returns Darwin/Linux)
+OS_LOWER="$(echo "$OS" | tr '[:upper:]' '[:lower:]')"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 LOCAL_BIN="$HOME/.local/bin"
 mkdir -p "$LOCAL_BIN"
