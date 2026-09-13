@@ -1,5 +1,23 @@
 // YogeeshCode: ranked free-model fallthrough.
 // Never stops on rate limits - cycles ranked list with cooldowns + escalating backoff.
+// Sources (all FREE, cost input=0 output=0):
+//   1. opencode/* (OpenCode Zen) - from models.dev catalog, needs `yogeeshcode auth login`
+//      (device OAuth). Verified live: 31 FREE Zen models incl. big-pickle,
+//      grok-code, nemotron-3-ultra-free (1M ctx), qwen3.6-plus-free, minimax,
+//      deepseek-v4-flash-free - all tool_call=true (agentic-capable).
+//   2. gemini-free/* - Google AI Studio free tier (API key).
+//   3. glm-free/* - Zhipu GLM free flagship (API key).
+//   4. openrouter-free/* - OpenRouter :free endpoints ($0, API key).
+//   5. groq-free/* - Groq free tier (API key).
+//   6. pollinations-noauth/* - zero-auth keyless fallback (config-defined provider).
+// NOTE: `provider.getModel()` resolves every entry through the models.dev
+// catalog (ModelsDev service -> auto-refresh every 60 min). If models.dev
+// DEPRECATES/removes a model id, getModel fails for it and the fallthrough
+// loop in prompt.ts skips to the next ranked entry automatically - so the
+// agent never breaks, it just moves down the chain. Keep this list in sync
+// with `yogeeshcode.json.example -> yogeeshcode.model_ranker.order`.
+// To force-refresh the catalog: `yogeeshcode models --refresh` or
+// `yogeeshcode registry force`.
 export type ModelRef = { providerID: string; modelID: string }
 export function parseModelRef(ref: string): ModelRef | undefined {
   const idx = ref.indexOf("/")
@@ -7,14 +25,23 @@ export function parseModelRef(ref: string): ModelRef | undefined {
   return { providerID: ref.slice(0, idx), modelID: ref.slice(idx + 1) }
 }
 export const DEFAULT_RANKED_FREE_MODELS: string[] = [
-  "pollinations-noauth/openai",
+  // Tier 1: OpenCode Zen FREE (models.dev, tool_call=true, cost 0/0).
+  // big-pickle = default agent model. Order: flagship -> 1M-ctx giants -> coders.
   "opencode/big-pickle",
-  "gemini-free/gemini-2.5-flash",
-  "opencode/grok-code",
   "opencode/nemotron-3-ultra-free",
+  "opencode/longcat-2.0-free",
+  "opencode/mimo-v2-pro-free",
+  "opencode/grok-code",
   "opencode/qwen3.6-plus-free",
   "opencode/minimax-m2.1-free",
   "opencode/deepseek-v4-flash-free",
+  "opencode/glm-5-free",
+  "opencode/kimi-k2.5-free",
+  "opencode/ling-3.0-flash-free",
+  "opencode/muse-spark-1.3-contributor-free",
+  // Tier 2: free-tier with API key (config-defined providers).
+  "pollinations-noauth/openai",
+  "gemini-free/gemini-2.5-flash",
   "glm-free/glm-4.5-flash",
   "openrouter-free/nex-agi/nex-n2.5-pro:free",
   "openrouter-free/nex-agi/nex-n2.5-mini:free",

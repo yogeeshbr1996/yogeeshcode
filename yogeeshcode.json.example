@@ -2,8 +2,8 @@
   "$schema": "https://opencode.ai/config.json",
   "_comment": "YogeeshCode: FREE cloud models only (no local/ollama - machine-safe). Autopilot: edits + safe terminal commands auto-approved; only risky ops ask/deny. CLI flag: yogeeshcode --auto approves all except explicit deny.",
   "theme": "yogeeshcode",
-  "model": "pollinations-noauth/openai",
-  "small_model": "pollinations-noauth/openai",
+  "model": "opencode/big-pickle",
+  "small_model": "opencode/grok-code",
   "permission": {
     "*": "ask",
     "read": "allow",
@@ -203,14 +203,20 @@
     "model_ranker": {
       "auto": true,
       "order": [
-        "pollinations-noauth/openai",
         "opencode/big-pickle",
-        "gemini-free/gemini-2.5-flash",
-        "opencode/grok-code",
         "opencode/nemotron-3-ultra-free",
+        "opencode/longcat-2.0-free",
+        "opencode/mimo-v2-pro-free",
+        "opencode/grok-code",
         "opencode/qwen3.6-plus-free",
         "opencode/minimax-m2.1-free",
         "opencode/deepseek-v4-flash-free",
+        "opencode/glm-5-free",
+        "opencode/kimi-k2.5-free",
+        "opencode/ling-3.0-flash-free",
+        "opencode/muse-spark-1.3-contributor-free",
+        "pollinations-noauth/openai",
+        "gemini-free/gemini-2.5-flash",
         "glm-free/glm-4.5-flash",
         "modelscope-free/Qwen/Qwen3-Coder-480B-A35B-Instruct",
         "github-models/openai/gpt-4o-mini",
@@ -234,8 +240,8 @@
     }
   },
   "agent": {
-    "plan": { "model": "pollinations-noauth/openai", "description": "YogeeshCode planner - Pollinations FREE, zero auth (keyless verified)" },
-    "build": { "model": "pollinations-noauth/openai", "description": "YogeeshCode builder - Pollinations FREE zero auth, falls through 24 ranked free models on rate limits" }
+    "plan": { "model": "opencode/big-pickle", "description": "YogeeshCode planner - Zen big-pickle, FREE via models.dev (yogeeshcode auth login)" },
+    "build": { "model": "opencode/big-pickle", "description": "YogeeshCode builder - Zen big-pickle FREE, falls through 29 ranked free models on rate limits" }
   }
 }
 
